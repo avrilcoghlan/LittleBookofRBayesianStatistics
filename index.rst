@@ -10,14 +10,14 @@ This is a simple introduction to Bayesian statistics using the R statistics soft
 There is a pdf version of this booklet available at:
 `https://github.com/avrilcoghlan/LittleBookofRBayesianStatistics/raw/master/_build/latex/BayesianStats.pdf <https://github.com/avrilcoghlan/LittleBookofRBayesianStatistics/raw/master/_build/latex/BayesianStats.pdf>`_.
 
-If you like this booklet, you may also like to check out my booklet on using
+If you like this booklet, you may also like to check out my booklets on using
 R for biomedical statistics,  
 `http://a-little-book-of-r-for-biomedical-statistics.readthedocs.org/
 <http://a-little-book-of-r-for-biomedical-statistics.readthedocs.org/>`_,
-and my booklet on using R for time series analysis,
+using R for time series analysis,
 `http://a-little-book-of-r-for-time-series.readthedocs.org/
-<http://a-little-book-of-r-for-time-series.readthedocs.org/>`_, and my
-booklet on using R for multivariate analysis,
+<http://a-little-book-of-r-for-time-series.readthedocs.org/>`_, and 
+using R for multivariate analysis,
 `http://little-book-of-r-for-multivariate-analysis.readthedocs.org/
 <http://little-book-of-r-for-multivariate-analysis.readthedocs.org/>`.
 
