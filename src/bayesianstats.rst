@@ -30,58 +30,129 @@ and using R for multivariate analysis,
 `http://little-book-of-r-for-multivariate-analysis.readthedocs.org/
 <http://little-book-of-r-for-multivariate-analysis.readthedocs.org/>`_.
 
-Reading Multivariate Analysis Data into R
------------------------------------------
+Estimating a Proportion
+-----------------------
 
-The first thing that you will want to do to analyse your multivariate data will be to read
-it into R, and to plot the data. You can read data into R using the read.table() function.
+Bayesian analysis can be useful for estimating a proportion, when you have some rough
+idea of what the value of the proportion is, but have relatively little data.
 
-For example, the file `http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data
-<http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data>`_
-contains data on concentrations of 13 different chemicals in wines grown in the same region in Italy that are
-derived from three different cultivars.
+Specifying a Prior for a Proportion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The data set looks like this:
+An appropriate prior to use for a proportion is a Beta prior.
 
-.. highlight:: r
+For example, if you want to estimate the proportion of people like chocolate, you
+might have a rough idea that the most likely value is around 0.85, but that the proportion
+is unlikely to be smaller than 0.60 or bigger than 0.95. 
 
-::
-
-    1,14.23,1.71,2.43,15.6,127,2.8,3.06,.28,2.29,5.64,1.04,3.92,1065
-    1,13.2,1.78,2.14,11.2,100,2.65,2.76,.26,1.28,4.38,1.05,3.4,1050
-    1,13.16,2.36,2.67,18.6,101,2.8,3.24,.3,2.81,5.68,1.03,3.17,1185
-    1,14.37,1.95,2.5,16.8,113,3.85,3.49,.24,2.18,7.8,.86,3.45,1480
-    1,13.24,2.59,2.87,21,118,2.8,2.69,.39,1.82,4.32,1.04,2.93,735
-    ... 
-
-There is one row per wine sample.
-The first column contains the cultivar of a wine sample (labelled 1, 2 or 3), and the following thirteen columns
-contain the concentrations of the 13 different chemicals in that sample.
-The columns are separated by commas. 
-
-When we read the file into R using the read.table() function, we need to use the "sep="
-argument in read.table() to tell it that the columns are separated by commas.
-That is, we can read in the file using the read.table() function as follows:
+You can find the best Beta prior to use in this case by specifying that the median (50\% percentile)
+of the prior is 0.85, that the 99.999\% percentile is 0.95, and that the 0.001\% percentile is 0.60:
 
 .. highlight:: r
 
 ::
 
-    > wine <- read.table("http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data", 
-              sep=",")
-    > wine
-         V1    V2   V3   V4   V5  V6   V7   V8   V9  V10       V11   V12  V13  V14
-     1    1 14.23 1.71 2.43 15.6 127 2.80 3.06 0.28 2.29  5.640000 1.040 3.92 1065
-     2    1 13.20 1.78 2.14 11.2 100 2.65 2.76 0.26 1.28  4.380000 1.050 3.40 1050
-     3    1 13.16 2.36 2.67 18.6 101 2.80 3.24 0.30 2.81  5.680000 1.030 3.17 1185
-     4    1 14.37 1.95 2.50 16.8 113 3.85 3.49 0.24 2.18  7.800000 0.860 3.45 1480
-     5    1 13.24 2.59 2.87 21.0 118 2.80 2.69 0.39 1.82  4.320000 1.040 2.93  735
-     ...
-     176  3 13.27 4.28 2.26 20.0 120 1.59 0.69 0.43 1.35 10.200000 0.590 1.56  835
-     177  3 13.17 2.59 2.37 20.0 120 1.65 0.68 0.53 1.46  9.300000 0.600 1.62  840
-     178  3 14.13 4.10 2.74 24.5  96 2.05 0.76 0.56 1.35  9.200000 0.610 1.60  560
+    > quantile1 <- list(p=0.5, x=0.85)    # we believe the median of the prior is 0.85
+    > quantile2 <- list(p=0.99999,x=0.95) # we believe the 99.999th percentile of the prior is 0.95
+    > quantile3 <- list(p=0.00001,x=0.60) # we believe the 0.001st percentile of the prior is 0.60
+
+We can then use the findBeta() function below to find the most appropriate Beta prior to use.
+
+::
+
+    > findBeta <- function(quantile1,quantile2,quantile3)
+      {
+         # find the quantiles specified by quantile1 and quantile2 and quantile3
+         quantile1_p <- quantile1[[1]]; quantile1_q <- quantile1[[2]]
+         quantile2_p <- quantile2[[1]]; quantile2_q <- quantile2[[2]]
+         quantile3_p <- quantile3[[1]]; quantile3_q <- quantile3[[2]]
+
+         # find the beta prior using quantile1 and quantile2
+         priorA <- beta.select(quantile1,quantile2)
+         priorA_a <- priorA[1]; priorA_b <- priorA[2]
+
+         # find the beta prior using quantile1 and quantile3
+         priorB <- beta.select(quantile1,quantile3)
+         priorB_a <- priorB[1]; priorB_b <- priorB[2]
+
+         # find the best possible beta prior
+         diff_a <- abs(priorA_a - priorB_a); diff_b <- abs(priorB_b - priorB_b)
+         step_a <- diff_a / 100; step_b <- diff_b / 100
+         if (priorA_a < priorB_a) { start_a <- priorA_a; end_a <- priorB_a }
+         else                     { start_a <- priorB_a; end_a <- priorA_a }
+         if (priorA_b < priorB_b) { start_b <- priorA_b; end_b <- priorB_b }
+         else                     { start_b <- priorB_b; end_b <- priorA_b }
+         steps_a <- seq(from=start_a, to=end_a, length.out=1000)
+         steps_b <- seq(from=start_b, to=end_b, length.out=1000)
+         max_error <- 10000000000000000000
+         best_a <- 0; best_b <- 0
+         for (a in steps_a) 
+         {
+            for (b in steps_b) 
+            {
+               # priorC is beta(a,b)
+               # find the quantile1_q, quantile2_q, quantile3_q quantiles of priorC: 
+               priorC_q1 <- qbeta(c(quantile1_p), a, b)
+               priorC_q2 <- qbeta(c(quantile2_p), a, b)
+               priorC_q3 <- qbeta(c(quantile3_p), a, b)
+               priorC_error <- abs(priorC_q1-quantile1_q) + 
+                               abs(priorC_q2-quantile2_q) + 
+                               abs(priorC_q3-quantile3_q)
+               if (priorC_error < max_error)
+               {
+                 max_error <- priorC_error; best_a <- a; best_b <- b
+               }
+           } 
+        }
+        print(paste("The best beta prior has a=",best_a,"b=",best_b))
+      }
+
+To use the findBeta() function, you first need to copy and paste it into R.
+The findBeta() function makes use of the beta.select() function from the LearnBayes
+R package, so you first need to install the LearnBayes package
+(for instructions on how to install an R package, see `How to install an R package 
+<./installr.html#how-to-install-an-r-package>`_). 
+
+You can then load the LearnBayes package, and use findBeta() to find the best
+Beta prior for a proportion. For example, to find the best Beta prior for the
+proportion of individuals who like chocolate, where you believe the most likely
+value of the proportion is 0.85, and the value is almost definitely between 0.60 and 0.95, you can
+type:
+
+::
+
+    > library("LearnBayes")
+    > findBeta(quantile1,quantile2,quantile3)
+      [1] "The best beta prior has a= 52.22 b= 9.52105105105105"
      
-In this case the data on 178 samples of wine has been read into the variable 'wine'.
+This tells us that the most appropriate prior to use for the proportion of
+individuals who like chocolate is a Beta prior with a=52.22 and b=9.52, that is,
+a Beta(52.22, 9.52) prior.
+
+We can plot the prior density by using the "curve" function:
+
+::
+
+    > curve(dbeta(x,52.22,9.52105105105105)) # plot the prior
+
+|image1|
+
+Note that in the command above we use the "dbeta()" function to specify that
+the density of a Beta(52.22,9.52105105105105) distribution. 
+
+We can see from the picture of the density for a Beta(52.22,9.52105105105105) distribution
+that it represents our prior beliefs about the proportion of people who like chocolate
+fairly well, as the peak of the distribution is at about 0.85, and the density lies
+almost entirely between about 0.68 and 0.97. 
+
+.. Examples:
+.. page 25 of OU book, 
+.. quantile1 <- list(p=0.5, x=0.40) 
+.. quantile2 <- list(p=0.99999, x=0.9)
+.. quantile3 <- list(p=0.00001, x=0.05)
+.. findBeta(quantile1,quantile2,quantile3)
+.. [1] "The best beta prior has a= 5.14 b= 7.54514514514515" 
+.. curve(dbeta(x,5.14,7.545)) # plot the prior 
 
 Links and Further Reading
 -------------------------
