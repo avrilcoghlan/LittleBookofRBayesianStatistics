@@ -151,7 +151,7 @@ almost entirely between about 0.68 and 0.97.
 .. quantile2 <- list(p=0.99999, x=0.9)
 .. quantile3 <- list(p=0.00001, x=0.05)
 .. findBeta(quantile1,quantile2,quantile3)
-.. [1] "The best beta prior has a= 5.14 b= 7.54514514514515" 
+.. "The best beta prior has a= 5.14 b= 7.54514514514515" 
 .. curve(dbeta(x,5.14,7.545)) # plot the prior 
 
 Links and Further Reading
