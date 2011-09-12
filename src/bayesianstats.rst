@@ -30,8 +30,8 @@ and using R for multivariate analysis,
 `http://little-book-of-r-for-multivariate-analysis.readthedocs.org/
 <http://little-book-of-r-for-multivariate-analysis.readthedocs.org/>`_.
 
-Estimating a Proportion
------------------------
+Using Bayesian Analysis to Estimate a Proportion
+------------------------------------------------
 
 Bayesian analysis can be useful for estimating a proportion, when you have some rough
 idea of what the value of the proportion is, but have relatively little data.
