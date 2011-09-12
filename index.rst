@@ -1,14 +1,14 @@
-Welcome to a Little Book of R for Multivariate Analysis!
-========================================================
+Welcome to a Little Book of R for Bayesian Statistics!
+======================================================
 
 By `Avril Coghlan <http://www.ucc.ie/microbio/avrilcoghlan/>`_,
 University College Cork, Cork, Ireland. 
 Email: a.coghlan@ucc.ie
 
-This is a simple introduction to multivariate analysis using the R statistics software.
+This is a simple introduction to Bayesian statistics using the R statistics software.
 
 There is a pdf version of this booklet available at:
-`https://github.com/avrilcoghlan/LittleBookofRMultivariateAnalysis/raw/master/_build/latex/MultivariateAnalysis.pdf <https://github.com/avrilcoghlan/LittleBookofRMultivariateAnalysis/raw/master/_build/latex/MultivariateAnalysis.pdf>`_.
+`https://github.com/avrilcoghlan/LittleBookofRBayesianStatistics/raw/master/_build/latex/BayesianStats.pdf <https://github.com/avrilcoghlan/LittleBookofRBayesianStatistics/raw/master/_build/latex/BayesianStats.pdf>`_.
 
 If you like this booklet, you may also like to check out my booklet on using
 R for biomedical statistics,  
@@ -16,7 +16,10 @@ R for biomedical statistics,
 <http://a-little-book-of-r-for-biomedical-statistics.readthedocs.org/>`_,
 and my booklet on using R for time series analysis,
 `http://a-little-book-of-r-for-time-series.readthedocs.org/
-<http://a-little-book-of-r-for-time-series.readthedocs.org/>`_.
+<http://a-little-book-of-r-for-time-series.readthedocs.org/>`_, and my
+booklet on using R for multivariate analysis,
+`http://little-book-of-r-for-multivariate-analysis.readthedocs.org/
+<http://little-book-of-r-for-multivariate-analysis.readthedocs.org/>`.
 
 Contents:
 
