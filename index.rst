@@ -19,7 +19,7 @@ using R for time series analysis,
 <http://a-little-book-of-r-for-time-series.readthedocs.org/>`_, and 
 using R for multivariate analysis,
 `http://little-book-of-r-for-multivariate-analysis.readthedocs.org/
-<http://little-book-of-r-for-multivariate-analysis.readthedocs.org/>`.
+<http://little-book-of-r-for-multivariate-analysis.readthedocs.org/>`_.
 
 Contents:
 
