@@ -288,6 +288,10 @@ Since the prior and posterior are distributions, the area under their densities 
 The likelihood has been scaled so that the area underneath it is also 1, so that it is
 easy to compare the likelihood with the prior and posterior.
 
+Therefore, the prior and likelihood curves should look the same shape as those plotted
+before (see above), but the y-axis scale is different for the likelihood scale compared
+to the plot made using calcLikelihoodForProportion() above.
+
 Note that the peak of the posterior always lies somewhere between the peaks of the prior and the 
 likelihood, because it combines information from the prior and the likelihood (which is based on the data). 
 
@@ -339,5 +343,5 @@ The content in this book is licensed under a `Creative Commons Attribution 3.0 L
 .. |image2| image:: ../_static/image2.png
             :width: 300
 .. |image4| image:: ../_static/image4.png
-            :width: 500
+            :width: 600
 
