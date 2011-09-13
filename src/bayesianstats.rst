@@ -154,6 +154,54 @@ almost entirely between about 0.68 and 0.97.
 .. "The best beta prior has a= 5.14 b= 7.54514514514515" 
 .. curve(dbeta(x,5.14,7.545)) # plot the prior 
 
+Calculating the Likelihood Function for a Proportion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Say you want to estimate a proportion, and you have a small data set that you can use for this
+purpose. For example, if you want to estimate the proportion of people who like chocolate, you
+may have carried out a survey of 50 people, and found that 45 say that they like chocolate.
+
+This small data set can be used to calculate the conditional p.m.f. (probability mass function)
+of the proportion given the observed data. This is called the likelihood function. It represents
+how likely the possible values of the proportion are, given the observed data. 
+
+If you want to estimate a proportion, and have a small data set, you can calculate the likelihood
+function for the proportion using the function calcLikelihoodForProportion() below:
+
+::
+
+    > calcLikelihoodForProportion <- function(successes, total)
+      {
+         curve(dbinom(successes,total,x)) # plot the likelihood
+      } 
+
+The function calcLikelihoodForProportion() takes two input arguments: the number of successes
+observed in the sample (eg. the number of people who like chocolate in the sample), and the
+total sample size.
+
+You can see that the likelihood function is being calculated using the Binomial distribution
+(using the R "dbinom()" function).
+
+For example, if we did a survey of 50 people, and found that 45 say they like chocolate, then
+our total sample size is 50 and we have 45 "successes". We can calculate the likelihood
+function for the proportion of people who like chocolate by typing:
+
+::
+
+    > calcLikelihoodForProportion(45, 50)
+
+|image2|
+
+You can see that the peak of the likelihood distribution is at 0.9, which is equal to the
+sample mean (45/50 = 0.9). In other words, the most likely value of the proportion, given the
+observed data, is 0.9. 
+
+.. For example, Example 3.6, page 29 of OU book:
+.. calcLikelihoodForProportion(11,50)
+.. 
+.. Note: curve(dbeta(x, (successes + 1), (total - successes + 1))) gives the same
+.. shaped curve but not with the same heights. Why is this? xxx
+
 Links and Further Reading
 -------------------------
 
@@ -194,5 +242,7 @@ The content in this book is licensed under a `Creative Commons Attribution 3.0 L
 <http://creativecommons.org/licenses/by/3.0/>`_.
 
 .. |image1| image:: ../_static/image1.png
+            :width: 300
+.. |image2| image:: ../_static/image2.png
             :width: 300
 
