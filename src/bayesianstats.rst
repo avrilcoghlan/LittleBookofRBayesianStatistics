@@ -180,7 +180,9 @@ observed in the sample (eg. the number of people who like chocolate in the sampl
 total sample size.
 
 You can see that the likelihood function is being calculated using the Binomial distribution
-(using the R "dbinom()" function).
+(using the R "dbinom()" function). That is, the likelihood function is the probability
+mass function of a B(total,successes) distribution, that is, of a Binomial distribution where the
+we observe "successes" successes out of a sample of "total" observations in total.
 
 For example, if we did a survey of 50 people, and found that 45 say they like chocolate, then
 our total sample size is 50 and we have 45 "successes". We can calculate the likelihood
@@ -201,6 +203,97 @@ observed data, is 0.9.
 .. 
 .. Note: curve(dbeta(x, (successes + 1), (total - successes + 1))) gives the same
 .. shaped curve but not with the same heights. Why is this? xxx
+
+Calculating the Posterior Distribution for a Proportion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Say you are trying to estimate a proportion, and have a prior distribution representing
+your beliefs about the value of that proportion. If you have collected some data, you
+can also calculate the likelihood function for the proportion given the data. 
+
+However, after observing the data, you may wish to update the prior distribution for
+the proportion, taking the data into consideration. That is, you may wish to calculate
+the conditional distribution of the proportion given the data and the prior. This is is called
+the posterior distribution for the proportion. 
+
+The posterior distribution ssummarises what is known about the proportion after the data
+has been observed, and combines the information from the prior and the data.
+
+In our example of estimating the proportion of people who like chocolate, we have a Beta(52.22,9.52) prior
+distribution (see above), and have some data from a survey in which we found that 45 out of 50 people like
+chocolate. We can calculate the posterior distribution for the proportion given the prior and data using
+the calcPosteriorForProportion() function below (which I adapted from "triplot" in the LearnBayes
+package):
+
+::
+
+    > calcPosteriorForProportion <- function(successes, total, a, b)
+      {
+         # Adapted from triplot() in the LearnBayes package
+         # Plot the prior, likelihood and posterior:
+         likelihood_a = successes + 1; likelihood_b = total - successes + 1
+         posterior_a = a + successes;  posterior_b = b + total - successes
+         theta = seq(0.005, 0.995, length = 500)
+         prior = dbeta(theta, a, b)
+         likelihood = dbeta(theta, likelihood_a, likelihood_b)
+         posterior  = dbeta(theta, posterior_a, posterior_b)
+         m = max(c(prior, likelihood, posterior))
+         plot(theta, posterior, type = "l", ylab = "Density", lty = 2, lwd = 3, 
+              main = paste("beta(", a, ",", b, ") prior, B(", total, ",", successes, ") data,",
+              "beta(", posterior_a, ",", posterior_b, ") posterior"), ylim = c(0, m), col = "red")
+         lines(theta, likelihood, lty = 1, lwd = 3, col = "blue")
+         lines(theta, prior, lty = 3, lwd = 3, col = "green")
+         legend(x=0.8,y=m, c("Prior", "Likelihood", "Posterior"), lty = c(3, 1, 2), 
+              lwd = c(3, 3, 3), col = c("green", "blue", "red"))
+         # Print out summary statistics for the prior, likelihood and posterior:
+         calcBetaMode <- function(aa, bb) { BetaMode <- (aa - 1)/(aa + bb - 2); return(BetaMode); }
+         calcBetaMean <- function(aa, bb) { BetaMean <- (aa)/(aa + bb); return(BetaMean); } 
+         calcBetaSd   <- function(aa, bb) { BetaSd <- sqrt((aa * bb)/(((aa + bb)^2) * (aa + bb + 1))); return(BetaSd); }
+         prior_mode      <- calcBetaMode(a, b)
+         likelihood_mode <- calcBetaMode(likelihood_a, likelihood_b)
+         posterior_mode  <- calcBetaMode(posterior_a, posterior_b)
+         prior_mean      <- calcBetaMean(a, b)
+         likelihood_mean <- calcBetaMean(likelihood_a, likelihood_b)
+         posterior_mean  <- calcBetaMean(posterior_a, posterior_b)
+         prior_sd        <- calcBetaSd(a, b)
+         likelihood_sd   <- calcBetaSd(likelihood_a, likelihood_b)
+         posterior_sd    <- calcBetaSd(posterior_a, posterior_b)
+         print(paste("mode for prior=",prior_mode,", for likelihood=",likelihood_mode,", for posterior=",posterior_mode))
+         print(paste("mean for prior=",prior_mean,", for likelihood=",likelihood_mean,", for posterior=",posterior_mean))
+         print(paste("sd for prior=",prior_sd,", for likelihood=",likelihood_sd,", for posterior=",posterior_sd))
+      }  
+
+.. For example, Example 3.7, page 32 of OU book:
+.. calcPosteriorForProportion(11,50,5.14,7.545)
+
+To use the "calcPosteriorForProportion()" function, you will first need to copy and paste it into R.
+It takes four arguments: the number of successes and total sample size in your data set, and the 
+a and b values for your Beta prior. 
+
+For example, to estimate the proportion of people who like chocolate, you had a Beta(52.22,9.52) prior
+and had observed in a survey that 45 out of 50 people like chocolate. Therefore, the number of successes
+is 45, the sample size is 50, and a and b for the prior are 52.22 and 9.52 respectively. Therefore, we
+can calculate the posterior for the proportion of people who like chocolate, given the data and prior, by typing:
+
+::
+
+    > calcPosteriorForProportion(45, 50, 52.22, 9.52)
+      [1] "mode for prior= 0.857381988617342 , for likelihood= 0.9 , for posterior= 0.876799708401677"
+      [1] "mean for prior= 0.845804988662132 , for likelihood= 0.884615384615385 , for posterior= 0.870055485949526"
+      [1] "sd for prior= 0.0455929848904483 , for likelihood= 0.0438847130123102 , for posterior= 0.0316674748482802"
+
+|image4|
+
+Since the prior and posterior are distributions, the area under their densities is 1.
+The likelihood has been scaled so that the area underneath it is also 1, so that it is
+easy to compare the likelihood with the prior and posterior.
+
+Note that the peak of the posterior always lies somewhere between the peaks of the prior and the 
+likelihood, because it combines information from the prior and the likelihood (which is based on the data). 
+
+In our example of estimating the proportion of people who like chocolate, 
+the peak of the posterior is roughly half-way between the peaks of the likelihood and prior,
+indicating that the prior and the data contribute roughly equally to the posterior.
 
 Links and Further Reading
 -------------------------
@@ -244,5 +337,7 @@ The content in this book is licensed under a `Creative Commons Attribution 3.0 L
 .. |image1| image:: ../_static/image1.png
             :width: 300
 .. |image2| image:: ../_static/image2.png
+            :width: 300
+.. |image4| image:: ../_static/image4.png
             :width: 300
 
