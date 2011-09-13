@@ -339,5 +339,5 @@ The content in this book is licensed under a `Creative Commons Attribution 3.0 L
 .. |image2| image:: ../_static/image2.png
             :width: 300
 .. |image4| image:: ../_static/image4.png
-            :width: 300
+            :width: 500
 
