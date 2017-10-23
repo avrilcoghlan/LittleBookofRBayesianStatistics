@@ -13,11 +13,11 @@ to explain how to carry out these analyses using R.
 
 If you are new to Bayesian statistics, and want to learn more about any of the concepts
 presented here, I would highly recommend the Open University book 
-"Bayesian Statistics" (product code M249/04), available from
-from `the Open University Shop <http://www.ouw.co.uk/store/>`_.
+"Bayesian Statistics" (product code M249/04), which you might be able to get from
+from `the University Book Search <http://www.universitybooksearch.co.uk/>`_.
 
 There is a pdf version of this booklet available at
-`https://github.com/avrilcoghlan/LittleBookofRBayesianStatistics/ raw/master/_build/latex/BayesianStats.pdf <https://github.com/avrilcoghlan/LittleBookofRBayesianStatistics/raw/master/_build/latex/BayesianStats.pdf>`_.
+`https://media.readthedocs.org/pdf/a-little-book-of-r-for-bayesian-statistics/latest/a-little-book-of-r-for-bayesian-statistics.pdf <https://media.readthedocs.org/pdf/a-little-book-of-r-for-bayesian-statistics/latest/a-little-book-of-r-for-bayesian-statistics.pdf>`_.
 
 If you like this booklet, you may also like to check out my booklets on using
 R for biomedical statistics, 
