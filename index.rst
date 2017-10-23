@@ -8,7 +8,7 @@ Email: alc@sanger.ac.uk
 This is a simple introduction to Bayesian statistics using the R statistics software.
 
 There is a pdf version of this booklet available at:
-`https://github.com/avrilcoghlan/LittleBookofRBayesianStatistics/raw/master/_build/latex/BayesianStats.pdf <https://github.com/avrilcoghlan/LittleBookofRBayesianStatistics/raw/master/_build/latex/BayesianStats.pdf>`_.
+`https://media.readthedocs.org/pdf/a-little-book-of-r-for-bayesian-statistics/latest/a-little-book-of-r-for-bayesian-statistics.pdf <https://media.readthedocs.org/pdf/a-little-book-of-r-for-bayesian-statistics/latest/a-little-book-of-r-for-bayesian-statistics.pdf>`_.
 
 If you like this booklet, you may also like to check out my booklets on using
 R for biomedical statistics,  
